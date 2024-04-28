@@ -1,0 +1,102 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+#define READ_END 0
+#define WRITE_END 1
+
+void childProcessOne(int pipe1[]);
+void childProcessTwo(int pipe1[], int pipe2[]);
+void parentProcess(int pipe2[]);
+
+int main() {
+    int pipe1[2], pipe2[2];
+    pid_t pid1, pid2;
+
+    // Create first pipe
+    if (pipe(pipe1) == -1) {
+        perror("pipe1");
+        exit(EXIT_FAILURE);
+    }
+
+    // Create second pipe
+    if (pipe(pipe2) == -1) {
+        perror("pipe2");
+        exit(EXIT_FAILURE);
+    }
+
+    // Create first child process
+    pid1 = fork();
+
+    if (pid1 < 0) {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    } else if (pid1 == 0) {
+        // First child process
+        childProcessOne(pipe1);
+        exit(EXIT_SUCCESS);
+    } else {
+        // Create second child process
+        pid2 = fork();
+
+        if (pid2 < 0) {
+            perror("fork");
+            exit(EXIT_FAILURE);
+        } else if (pid2 == 0) {
+            // Second child process
+            childProcessTwo(pipe1, pipe2);
+            exit(EXIT_SUCCESS);
+        } else {
+            // Parent process
+            parentProcess(pipe2);
+            wait(NULL);
+            wait(NULL);
+            printf("\nChild processes terminated\n");
+            exit(EXIT_SUCCESS);
+        }
+    }
+}
+
+void childProcessOne(int pipe1[]) {
+    close(pipe1[READ_END]);
+
+    char c;
+    while (1) {
+        scanf(" %c", &c);
+        write(pipe1[WRITE_END], &c, sizeof(char));
+    }
+
+    close(pipe1[WRITE_END]);
+}
+
+void childProcessTwo(int pipe1[], int pipe2[]) {
+    close(pipe1[WRITE_END]);
+    close(pipe2[READ_END]);
+
+    char c;
+    while (1) {
+        read(pipe1[READ_END], &c, sizeof(char));
+        c++;
+        write(pipe2[WRITE_END], &c, sizeof(char));
+    }
+
+    close(pipe1[READ_END]);
+    close(pipe2[WRITE_END]);
+}
+
+void parentProcess(int pipe2[]) {
+    close(pipe2[WRITE_END]);
+
+    char c;
+    while (1) {
+        read(pipe2[READ_END], &c, sizeof(char));
+        if (c == EOF) {
+            break;
+        }
+        c--;
+        printf("%c", c);
+    }
+
+    close(pipe2[READ_END]);
+}

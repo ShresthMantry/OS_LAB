@@ -1,0 +1,117 @@
+Process 1 ->
+
+Process Table:
+P0 0 3
+P1 1 6
+P2 5 4
+P3 7 3
+
+For First Come First Served Scheduling ->                  
+Turnaround times: P0[3] P1[8] P2[8] P3[9]                   
+Wait times: P0[0] P1[2] P2[4] P3[6]                         
+Average turnaround time: 7.00
+Average wait time: 3.00
+
+For Round Robin Scheduling ->                                   #### min avg wait time of -> SRBF ####
+Turnaround times: P0[5] P1[12] P2[10] P3[9] 
+Wait times: P0[2] P1[6] P2[6] P3[6]                                 
+Average turnaround time: 9.00
+Average wait time: 5.00
+
+For SRBF Scheduling ->
+Turnaround times: P0[3] P1[8] P2[11] P3[5] 
+Wait times: P0[0] P1[2] P2[7] P3[2] 
+Average turnaround time: 6.75
+Average wait time: 2.75
+
+--------------------------------------------------------------------------------------------------
+
+Process 2-> 
+
+
+Process Table:
+P1 0 4
+P2 1 5
+P3 2 6
+P4 3 3
+P5 4 2
+
+First Come First Served Scheduling ->
+Turnaround times: P1[4] P2[8] P3[13] P4[15] P5[16] 
+Wait times: P1[0] P2[3] P3[7] P4[12] P5[14] 
+Average turnaround time: 11.20
+Average wait time: 7.20
+
+Round Robin Scheduling->                                       #### min avg wait time of -> SRBF ####
+Turnaround times: P1[13] P2[16] P3[18] P4[9] P5[11] 
+Wait times: P1[9] P2[11] P3[12] P4[6] P5[9] 
+Average turnaround time: 13.40
+Average wait time: 9.40
+
+SRBF Scheduling->
+Turnaround times: P1[4] P2[13] P3[18] P4[6] P5[2] 
+Wait times: P1[0] P2[8] P3[12] P4[3] P5[0] 
+Average turnaround time: 8.60
+Average wait time: 4.60
+
+
+--------------------------------------------------------------------------------------------------
+
+Process 3->
+
+Process Table:
+P5 2 2
+P3 3 8
+P1 5 6
+P4 6 3
+P2 8 7
+
+First Come First Served Scheduling ->
+Turnaround times: P5[2] P3[9] P1[13] P4[15] P2[20] 
+Wait times: P5[0] P3[1] P1[7] P4[12] P2[13] 
+Average turnaround time: 11.80
+Average wait time: 6.60
+
+Round Robin Scheduling ->
+Turnaround times: P5[2] P3[21] P1[17] P4[7] P2[20]              #### min avg wait time of -> SRBF ####
+Wait times: P5[0] P3[13] P1[11] P4[4] P2[13] 
+Average turnaround time: 13.40
+Average wait time: 8.20
+
+SRBF Scheduling ->
+Turnaround times: P5[2] P3[18] P1[9] P4[3] P2[20] 
+Wait times: P5[0] P3[10] P1[3] P4[0] P2[13] 
+Average turnaround time: 10.40
+Average wait time: 5.20
+
+
+--------------------------------------------------------------------------------------------------
+
+Process 4->
+
+Process Table:
+P1 0 5
+P2 1 3
+P3 2 1
+P4 3 7
+
+First Come First Served Scheduling ->
+Turnaround times: P1[5] P2[7] P3[7] P4[13] 
+Wait times: P1[0] P2[4] P3[6] P4[6] 
+Average turnaround time: 8.00
+Average wait time: 4.00
+
+Round Robin Scheduling ->
+Turnaround times: P1[11] P2[9] P3[3] P4[13]                         #### min avg wait time of -> SRBF ####
+Wait times: P1[6] P2[6] P3[2] P4[6] 
+Average turnaround time: 9.00
+Average wait time: 5.00
+
+SRBF Scheduling ->
+Turnaround times: P1[9] P2[4] P3[1] P4[13] 
+Wait times: P1[4] P2[1] P3[0] P4[6] 
+Average turnaround time: 6.75
+Average wait time: 2.75
+
+
+--------------------------------------------------------------------------------------------------

@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+#define READ_END 0
+#define WRITE_END 1
+
+int main() {
+    int pipe1[2], pipe2[2];
+    pid_t pid1, pid2;
+
+    // Create first pipe
+    if (pipe(pipe1) == -1) {
+        perror("pipe1");
+        exit(EXIT_FAILURE);
+    }
+
+    // Create second pipe
+    if (pipe(pipe2) == -1) {
+        perror("pipe2");
+        exit(EXIT_FAILURE);
+    }
+
+    // Create first child process
+    pid1 = fork();
+
+    if (pid1 < 0) {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    } else if (pid1 == 0) {
+        // First child process: Read from pipe1 and write to pipe2
+        close(pipe1[WRITE_END]);
+        close(pipe2[READ_END]);
+
+        char c;
+        while (1) {
+            read(pipe1[READ_END], &c, sizeof(char));
+            c++;
+            write(pipe2[WRITE_END], &c, sizeof(char));
+        }
+
+        close(pipe1[READ_END]);
+        close(pipe2[WRITE_END]);
+        exit(EXIT_SUCCESS);
+    } else {
+        // Create second child process
+        pid2 = fork();
+
+        if (pid2 < 0) {
+            perror("fork");
+            exit(EXIT_FAILURE);
+        } else if (pid2 == 0) {
+            // Second child process: Read from pipe2 and write to pipe1
+            close(pipe1[READ_END]);
+            close(pipe2[WRITE_END]);
+
+            char c;
+            while (1) {
+                read(pipe2[READ_END], &c, sizeof(char));
+                c--;
+                write(pipe1[WRITE_END], &c, sizeof(char));
+            }
+
+            close(pipe1[WRITE_END]);
+            close(pipe2[READ_END]);
+            exit(EXIT_SUCCESS);
+        } else {
+            // Parent process: Read from pipe1 and print
+            close(pipe1[READ_END]);
+            close(pipe2[WRITE_END]);
+
+            char c;
+            while (1) {
+                scanf(" %c", &c);
+                write(pipe1[WRITE_END], &c, sizeof(char));
+                read(pipe2[READ_END], &c, sizeof(char));
+                printf("%c", c);
+            }
+
+            close(pipe1[WRITE_END]);
+            close(pipe2[READ_END]);
+            wait(NULL);
+            wait(NULL);
+            printf("\nChild processes terminated\n");
+            exit(EXIT_SUCCESS);
+        }
+    }
+}
